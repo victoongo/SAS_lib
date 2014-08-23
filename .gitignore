@@ -1,0 +1,12 @@
+#.gitignore
+
+### DBlanchette ###
+
+#char2fmt.sas
+#isid.sas
+#minime.sas
+#ren_stem.sas
+#runquit.sas
+#type.sas
+#which.sas
+#all_macros.sas
