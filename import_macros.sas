@@ -8,9 +8,11 @@
 		put _infile_;
 	run;
 	proc import datafile=exTemp1
-				dbms=csv replace out=&outputfile.;
+				dbms=csv replace out=tempoutputfile;
 		*datarow=4;
 		delimiter=',';
 		getnames=yes;
+		guessingrows=32767;
 	run;
+	%chrtonum(tempoutputfile,&outputfile.)
 %mend;
