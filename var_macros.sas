@@ -1,5 +1,6 @@
 * SAS Sample 40700: How to convert all character variables to numeric and use the same variable names in the output data set;
-%macro chrtonum(inputfile,outputfile);
+* can NOT handle existing char vars in the data; 
+%macro chrtonum0(inputfile,outputfile);
 	/*PROC CONTENTS is used to create an output data set called VARS to list all */
 	/*variable names and their type from the TEST data set. */ 
 

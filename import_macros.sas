@@ -14,5 +14,5 @@
 		getnames=yes;
 		guessingrows=32767;
 	run;
-	%chrtonum(tempoutputfile,&outputfile.)
+	%chrtonum2(tempoutputfile,&outputfile.);
 %mend;
