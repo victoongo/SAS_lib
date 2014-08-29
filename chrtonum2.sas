@@ -25,12 +25,14 @@
 	data _null_;
 		call symput('obs',obs);
 		set one_u_char nobs=obs;
-		stop; run;
+		stop; 
+	run;
 
 	data _null_;
 		call symput('f',obs);
 		set one nobs=obs;
-		stop; run;
+		stop; 
+	run;
 
 	data one_b;
 		set one_u_char;
@@ -42,14 +44,14 @@
 	proc sort data=contents; by varnum; run;
 	proc sql noprint;
 		select name
-		into : allnames separated by ','
+			into : allnames separated by ','
 		from contents;
 		select name1, name2
-		into : name1 separated by ' ',
+			into : name1 separated by ' ',
 		: name2 separated by ' '
 		from one_b;
 		select name3
-		into : name3 separated by ' '
+			into : name3 separated by ' '
 		from one_u_num;
 
 	data two;
@@ -58,9 +60,11 @@
 		array xxx(&obs) $ &name1; /*array of all character variables*/
 		array yyy(&obs) y1-y&d; /*sequential flags for each variable */
 		do I=1 to &obs;
-		if anyalpha(xxx(I))=0 then yyy(I)=1;
-		else yyy(I)=0;
-		end; drop I; run;
+			if anyalpha(xxx(I))=0 then yyy(I)=1;
+			else yyy(I)=0;
+		end; 
+		drop I; 
+	run;
 
 	proc transpose data=two out=three; run;
 
@@ -79,14 +83,14 @@
 		data one_e;
 		set one;
 		%do I=1 %to &obs;
-		%if %scan(&flag,&I,' ')=1 %then %do;
-		%scan(&name2,&I,' ')=0;
-		%scan(&name2,&I,' ')=input(%scan(&name1,&I,' '),4.);
-		%end;
-		%else
-		%if %scan(&flag,&I,' ')=0 %then %do;
-		%scan(&name2,&I,' ')=%scan(&name1,&I,' ');
-		%end;
+			%if %scan(&flag,&I,' ')=1 %then %do;
+				%scan(&name2,&I,' ')=0;
+				%scan(&name2,&I,' ')=input(%scan(&name1,&I,' '),4.);
+			%end;
+			%else
+			%if %scan(&flag,&I,' ')=0 %then %do;
+				%scan(&name2,&I,' ')=%scan(&name1,&I,' ');
+			%end;
 		%end;
 		drop &name1;
 	run;
@@ -95,7 +99,7 @@
 	%macro trtr;
 		rename
 		%do I=1 %to &obs;
-		%scan(&name2,&I,' ')=%scan(&name1,&I,' ')
+			%scan(&name2,&I,' ')=%scan(&name1,&I,' ')
 		%end;
 		;
 		run;
@@ -103,7 +107,7 @@
 	data fin1;
 		set one_e ;
 		%trtr;
-		run;
+	run;
 	proc sql;
 		create table &outputfile. as
 		select &allnames
