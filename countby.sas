@@ -13,7 +13,7 @@
 		by sortvar;
 		if first.sortvar then output;
 	run;
-	proc freq data=tmpf1;
+	proc freq data=tmpf1 noprint;
 		tables &b. / out=tmpf2;
 	run;
 	data &filename.;
@@ -32,7 +32,7 @@
 		by &b. &c.;
 		if first.&c. then output;
 	run;
-	proc freq data=tmpf1;
+	proc freq data=tmpf1 noprint;
 		tables &b. / out=tmpf2;
 	run;
 	data &filename.;
@@ -112,11 +112,9 @@
 * pick one with highest cout of d by b and c ;
 %macro pick_high(filename,b,c,d,e);
 	filename tmpf1 temp;
-	proc sort data=&filename. out=tmpf1 ; 
-		by &b. &c. &d. &e.; 
-	run;
+	proc sort data=&filename. out=tmpf1; by &b. &c. descending &e.; run;
 	data tmpf1(keep=&d.);
-		set tmpf1 (keep=&b. &c. &d. &e.);
+		set tmpf1 (keep=&b. &c. &d.);
 		by &b. &c.;
 		if first.&c. then output;
 	run;
@@ -128,4 +126,4 @@
 		if kep=1 then output;
 	run;
 %mend;
-%pick_high(scoredata,pc,nest_id,pin,countof_form_by_pin)
+
