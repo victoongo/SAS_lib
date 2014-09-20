@@ -1,0 +1,28 @@
+%macro scale_pctmiss_cutoff(filename,scales_list,pct);
+	data &filename.; 
+		set &filename.; 
+		%do i=1 %to %sysfunc(countw(&&&scales_list..));
+			%let scale=%scan(&&&scales_list..,&i.);
+				&scale.=sum(of &&&scale..);
+				&scale._cm=cmiss(of &&&scale..);
+				&scale._pctm=&scale._cm/%sysfunc(countw(&&&scale..));
+				if &scale._pctm>&pct. then &scale.=.;
+		%end;
+	run;
+%mend;
+
+%macro alpha(filename,scales_list);
+	data &scales_list._alpha; run;
+	%do i=1 %to %sysfunc(countw(&&&scales_list..));
+		%let scale=%scan(&&&scales_list..,&i.);
+		proc corr data=&filename. alpha nomiss outp=&scale. noprint; var &&&scale..; run;
+		data &scale.; set &scale.(drop=_name_ obs=5); scale="&scale."; run;
+		proc transpose data=&scale. out=&scale._t;
+			var &&&scale..;
+			by scale;
+			id _type_;
+		run;
+		data &scales_list._alpha; set &scales_list._alpha &scale._t; if mean=. then delete; run;
+	%end;
+	proc print data=&scales_list._alpha; run;
+%mend;

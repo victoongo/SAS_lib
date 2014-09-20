@@ -93,9 +93,9 @@
 	proc sort data=&filename.; by pin; run;
 	data tmpf1(keep=pin pc);
 		set &filename. (keep=pin form);
-		if form="NIH TB Parent Education" then pc=0;
+		if form="NIH TB Parent Education" then pc=1;
 		*if pc=0 then output;
-		if pc~=0 then delete;
+		if pc~=1 then delete;
 	run;
 	data tmpf1;
 		set tmpf1;

@@ -25,8 +25,8 @@
 		%end;
 	%end;
 %mend;
-%reshape_wide(scoredata,scoredata_w,form nest_id,pc,&scores.)
 
+* add postfix to the end of the variables in a list ;
 %macro lst_post(vlst,lstname,post_lst);
 	%global &lstname.;
 	%let &lstname.=;
@@ -39,6 +39,3 @@
 		%end;
 	%end;
 %mend;
-%lst_post(&scores.,pcscores,parent child)
-%put &pcscores.;
-%reshape_wide(scoredata_w,scoredata_ww,nest_id,form,&pcscores.)
