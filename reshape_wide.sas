@@ -39,3 +39,31 @@
 		%end;
 	%end;
 %mend;
+
+* add prefix to the end of the variables in a list ;
+%macro lst_pre(vlst,lstname,pre_lst);
+	%global &lstname.;
+	%let &lstname.=;
+	%if &vlst.~= %then						
+	%do i=1 %to %sysfunc(countw(&vlst.));
+		%let vi=%scan(&vlst.,&i.);
+		%do j=1 %to %sysfunc(countw(&pre_lst.));
+			%let prei=%scan(&pre_lst.,&j.);
+			%let &lstname.=&&&lstname.. &prei._&vi.;
+		%end;
+	%end;
+%mend;
+
+* rename by adding prefix to the beginning of the variables in a list ;
+%macro lst_rename(vlst,lstname,pre_lst);
+	%global &lstname.;
+	%let &lstname.=;
+	%if &vlst.~= %then						
+	%do i=1 %to %sysfunc(countw(&vlst.));
+		%let vi=%scan(&vlst.,&i.);
+		%do j=1 %to %sysfunc(countw(&pre_lst.));
+			%let prei=%scan(&pre_lst.,&j.);
+			%let &lstname.=&&&lstname.. &vi.=&prei._&vi.;
+		%end;
+	%end;
+%mend;
