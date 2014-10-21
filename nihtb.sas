@@ -121,8 +121,8 @@ run;
 proc format;
 	value pc_ 0='parent' 1='child';
 run;
-data scoredata;
-	set scoredata(keep=nest_id pin pc form form_s &scores.);
+data scoredata(rename=(gender=tb_gender age=tb_age));
+	set scoredata(keep=nest_id pin pc gender age form form_s &scores.);
 	if form='' then delete;
 	if computed_score=-99 then computed_score=.;
 	*if pc=. then pc=0;
@@ -143,7 +143,7 @@ data scoredata;
 run;
 proc sort data=scoredata; by form nest_id pc; run;
 proc transpose data=scoredata out=scoredata_t(rename=(_NAME_=score_type));
-	var &scores.;
+	var &scores. tb_age tb_gender;
 	by form nest_id;
 	id pc;
 run;
@@ -161,10 +161,22 @@ run;
 proc print data=pearsoncorr; run;
 
 
-%reshape_wide(scoredata,scoredata_w,form_s nest_id,pc,&scores.)
+%reshape_wide(scoredata,scoredata_w,form_s nest_id,pc,&scores. tb_age tb_gender)
 %lst_post(&scores.,pcscores,parent child)
 %put &pcscores.;
 %reshape_wide(scoredata_w,scoredata_ww,nest_id,form_s,&pcscores.)
+
+proc sort data=scoredata_w; by nest_id descending tb_age_child; run;
+data scoredata_w_gender_age;
+	set scoredata_w(keep=nest_id tb_gender: tb_age:);
+	by nest_id;
+	if first.nest_id then output;
+run;
+
+data scoredata_ww;
+	merge scoredata_w_gender_age scoredata_ww;
+	by nest_id;
+run;
 
 data nihtb.scoredata_ww;
 	set scoredata_ww(rename=(nest_id=nestid));
@@ -172,7 +184,7 @@ run;
 
 proc sort data=nihtb.scoredata_ww out=scoredata_ww; by nestid; run;
 proc sort data=nihtb.nest_i_ii_sr_merge_05aug14 out=nest_merge; by nestid; run;
-data nihtb.nest_merge;
+data nihtb.nest_merge_tb;
 	merge scoredata_ww(in=s) nest_merge;
 	by nestid;
 	if s=1 then niches_nihtb=1;

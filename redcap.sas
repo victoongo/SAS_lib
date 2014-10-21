@@ -91,12 +91,12 @@ data nihtb.nest_merge;
 	nestid=nestid+0;
 run;
 proc sort data=redcap_parent out=redcap.redcap_parent; by nestid; run;
-data nihtb.nest_merge;
-	merge redcap.redcap_parent(in=r keep=nestid &pscores_pre.) nihtb.nest_merge;
+data nihtb.nest_merge_tb_rc;
+	merge redcap.redcap_parent(in=r keep=nestid &pscores_pre. mom_degre) nihtb.nest_merge_tb;
 	by nestid;
 	if r=1 then redcap_parent=1;
 run;
 
-proc summary data=nihtb.nest_merge print; var _numeric_; run;
+proc summary data=nihtb.nest_merge_tb_rc print; var _numeric_; run;
 proc summary data=redcap_parent print; var _numeric_; run;
 
