@@ -43,7 +43,7 @@
 * SWAN30 (1-7) norecode;
 %let swan_in = swan01 - swan09; 
 %let swan_hi = swan10 - swan18; 
-%let swan_temp = swan19 - swan30; 
+%let swan_tmp = swan19 - swan30; 
 
 %let swan_sum = swan_in swan_hi; 
 
@@ -77,13 +77,13 @@
 %let psdqs_an = psdqs02 psdqs04 psdqs06 psdqs10 psdqs13 psdqs16 psdqs19 psdqs23 psdqs26 psdqs28 psdqs30 psdqs32;
 %let psdqs_pm = psdqs08 psdqs15 psdqs17 psdqs20 psdqs24;
 
-%let psdqs_sub_scales = psdqs_av padqs_an psdqs_pm;
+%let psdqs_sub_scales = psdqs_av psdqs_an psdqs_pm;
 
 * psdgo32 (1-5 norecode) ;
 %let psdqo_av = psdqo01 psdqo03 psdqo05 psdqo07 psdqo09 psdqo11 psdqo12 psdqo14 psdqo18 psdqo21 psdqo22 psdqo25 psdqo27 psdqo29 psdqo31;
 %let psdqo_an = psdqo02 psdqo04 psdqo06 psdqo10 psdqo13 psdqo16 psdqo19 psdqo23 psdqo26 psdqo28 psdqo30 psdqo32;
 %let psdqo_pm = psdqo08 psdqo15 psdqo17 psdqo20 psdqo24;
 
-%let psdqo_sub_scales = psdqo_av padqo_an psdqo_pm;
+%let psdqo_sub_scales = psdqo_av psdqo_an psdqo_pm;
 
 * smoke shs psy; 

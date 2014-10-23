@@ -1,7 +1,4 @@
-%let nihtb='D:\Projects\NIHTB';
 x 'cd D:\Projects\NIHTB';
-libname nihtb &nihtb.;
-
 %include "D:\dropbox\projects\sas_lib\all_macros.sas";
 %csvtosas('FBFF68E1-8148-4D5E-AF5D-DB04E3C4FDF2_AssessmentScores.csv',nihtb.scoredata,3);
 %csvtosas('FBFF68E1-8148-4D5E-AF5D-DB04E3C4FDF2_RegistrationData.csv',nihtb.registrationdata,3);
@@ -15,7 +12,7 @@ proc sort data=nihtb.registrationdata out=registrationdata; by PIN; run;
 proc sort data=nihtb.rawdata out=rawdata; by PIN; run;
 
 data registrationdata;
-	set registrationdata(keep=PIN nest_id gender age race ethnicity);
+	set registrationdata(keep=PIN nest_id gender age race ethncty);
 	if age>50 then age=.;
 	pcage=1;
 	if age>16 & age~=. then pcage=0;
@@ -121,8 +118,8 @@ run;
 proc format;
 	value pc_ 0='parent' 1='child';
 run;
-data scoredata(rename=(gender=tb_gender age=tb_age race=tb_race ethnicity=tb_ethnicity));
-	set scoredata(keep=nest_id pin pc gender age race ethnicity form form_s &scores.);
+data scoredata(rename=(gender=tb_gender age=tb_age race=tb_race ethncty=tb_ethncty));
+	set scoredata(keep=nest_id pin pc gender age race ethncty form form_s &scores.);
 	if form='' then delete;
 	if computed_score=-99 then computed_score=.;
 	*if pc=. then pc=0;
@@ -143,7 +140,7 @@ data scoredata;
 run;
 proc sort data=scoredata; by form nest_id pc; run;
 proc transpose data=scoredata out=scoredata_t(rename=(_NAME_=score_type));
-	var &scores. tb_age tb_gender tb_race tb_ethnicity;
+	var &scores. tb_age tb_gender tb_race tb_ethncty;
 	by form nest_id;
 	id pc;
 run;
@@ -161,14 +158,14 @@ run;
 proc print data=pearsoncorr; run;
 
 
-%reshape_wide(scoredata,scoredata_w,form_s nest_id,pc,&scores. tb_age tb_gender tb_race tb_ethnicity)
+%reshape_wide(scoredata,scoredata_w,form_s nest_id,pc,&scores. tb_age tb_gender tb_race tb_ethncty)
 %lst_post(&scores.,pcscores,parent child)
 %put &pcscores.;
 %reshape_wide(scoredata_w,scoredata_ww,nest_id,form_s,&pcscores.)
 
 proc sort data=scoredata_w; by nest_id descending tb_age_child; run;
 data scoredata_w_demo;
-	set scoredata_w(keep=nest_id tb_gender: tb_age: tb_race: tb_ethnicity:);
+	set scoredata_w(keep=nest_id tb_gender: tb_age: tb_race: tb_ethncty:);
 	by nest_id;
 	if first.nest_id then output;
 run;

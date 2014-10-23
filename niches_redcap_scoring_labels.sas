@@ -20,7 +20,7 @@ label basc_hy = 'hyperactivity';
 	label brief_fi = 'flexibility index';
 	label brief_emi = 'emergent metacognition index';
 	label brief_gec = 'global consecutive composite';
-/*
+
 	label caars_is = 'DSM-IV Inattentive Symptoms';
 	label caars_hs = 'DSM-IV Hyperactive/Impulsive Symptoms';
 	label caars_ai = 'ADHS Index';

@@ -1,7 +1,4 @@
-%let redcap='D:\Projects\redcap';
 x 'cd D:\Projects\redcap';
-libname redcap &redcap.;
-
 %include "D:\dropbox\projects\sas_lib\all_macros.sas";
 /*
 * teacher survey;
@@ -58,10 +55,16 @@ run;
 %scale_pctmiss_cutoff(redcap_parent,basc_sub_scales,0.2)
 %scale_pctmiss_cutoff(redcap_parent,brief_sub_scales,0.2)
 %scale_pctmiss_cutoff(redcap_parent,brief_scales,0)
-/*
 %scale_pctmiss_cutoff(redcap_parent,caars_sub_scales,0.2)
 %scale_pctmiss_cutoff(redcap_parent,caars_scales,0)
-*/
+%scale_pctmiss_cutoff(redcap_parent,swan_sub_scales,0.2)
+%scale_pctmiss_cutoff(redcap_parent,swan_scales,0)
+%scale_pctmiss_cutoff(redcap_parent,sdq_sub_scales,0.2)
+%scale_pctmiss_cutoff(redcap_parent,sdq_scales,0)
+%scale_pctmiss_cutoff(redcap_parent,psi_sub_scales,0.2)
+%scale_pctmiss_cutoff(redcap_parent,psdqs_sub_scales,0)
+%scale_pctmiss_cutoff(redcap_parent,psdqo_sub_scales,0.2)
+
 data redcap_parent; 
 	set redcap_parent;
 	%include "D:\dropbox\projects\sas_lib\niches_redcap_scoring_labels.sas";
@@ -70,8 +73,20 @@ run;
 %alpha(redcap_parent,basc_sub_scales)
 %alpha(redcap_parent,brief_sub_scales)
 %alpha(redcap_parent,brief_scales)
+%alpha(redcap_parent,caars_sub_scales)
+%alpha(redcap_parent,caars_scales)
+%alpha(redcap_parent,swan_sub_scales)
+%alpha(redcap_parent,swan_scales)
+%alpha(redcap_parent,sdq_sub_scales)
+%alpha(redcap_parent,sdq_scales)
+%alpha(redcap_parent,psi_sub_scales)
+%alpha(redcap_parent,psdqs_sub_scales)
+%alpha(redcap_parent,psdqo_sub_scales)
 */
-%let scores = &basc_sub_scales. &brief_sub_scales. &brief_scales.;
+%let scores = &basc_sub_scales. &brief_sub_scales. &brief_scales. 
+			  &caars_sub_scales. &caars_scales. &swan_sub_scales. &swan_scales. &sdq_sub_scales. &sdq_scales. 
+			  &psi_sub_scales. &psdqs_sub_scales. &psdqo_sub_scales.
+			  mom_degre ;
 %put &scores.;
 %lst_pre(&scores.,pscores_pre,es0_pa)
 %put &pscores_pre.;
@@ -92,7 +107,7 @@ data nihtb.nest_merge;
 run;
 proc sort data=redcap_parent out=redcap.redcap_parent; by nestid; run;
 data nihtb.nest_merge_tb_rc;
-	merge redcap.redcap_parent(in=r keep=nestid &pscores_pre. mom_degre) nihtb.nest_merge_tb;
+	merge redcap.redcap_parent(in=r keep=nestid &pscores_pre.) nihtb.nest_merge_tb;
 	by nestid;
 	if r=1 then redcap_parent=1;
 run;
