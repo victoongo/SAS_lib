@@ -1,4 +1,4 @@
-x 'cd D:\Projects\NIHTB';
+x 'cd U:\ExportedData\NIHTB';
 %include "D:\dropbox\projects\sas_lib\all_macros.sas";
 %csvtosas('FBFF68E1-8148-4D5E-AF5D-DB04E3C4FDF2_AssessmentScores.csv',nihtb.scoredata,3);
 %csvtosas('FBFF68E1-8148-4D5E-AF5D-DB04E3C4FDF2_RegistrationData.csv',nihtb.registrationdata,3);

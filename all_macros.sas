@@ -1,4 +1,4 @@
-%let nihtb='D:\Projects\NIHTB';
+%let nihtb='U:\ExportedData\NIHTB';
 libname nihtb &nihtb.;
 
 %let redcap='D:\Projects\redcap';
