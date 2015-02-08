@@ -1,4 +1,4 @@
-x 'cd D:\Projects\redcap';
+x 'cd p:\niches\redcap';
 %include "D:\dropbox\projects\sas_lib\all_macros.sas";
 /*
 * teacher survey;
@@ -8,7 +8,7 @@ data redcap.redcap_teacher;
 run;
 */
 * Parent survey;
-%include "D:\Projects\redcap\NICHESParentSurvey_SAS_2014-10-16_1529.sas";
+%include "p:\NICHES\redcap\NICHESParentSurvey_SAS_2015-01-08_1109.sas";
 data redcap.redcap_parent;
 	set redcap;
 run;
@@ -106,12 +106,12 @@ data nihtb.nest_merge;
 	nestid=nestid+0;
 run;
 proc sort data=redcap_parent out=redcap.redcap_parent; by nestid; run;
-data nihtb.nest_merge_tb_rc;
-	merge redcap.redcap_parent(in=r keep=nestid &pscores_pre.) nihtb.nest_merge_tb;
+data niches.nest_merge_tb_rc;
+	merge redcap.redcap_parent(in=r keep=nestid &pscores_pre.) niches.nest_merge_tb;
 	by nestid;
 	if r=1 then redcap_parent=1;
 run;
 
-proc summary data=nihtb.nest_merge_tb_rc print; var _numeric_; run;
+proc summary data=niches.nest_merge_tb_rc print; var _numeric_; run;
 proc summary data=redcap_parent print; var _numeric_; run;
 

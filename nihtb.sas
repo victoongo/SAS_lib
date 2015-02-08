@@ -1,4 +1,4 @@
-x 'cd U:\ExportedData\NIHTB';
+x 'cd p:\niches\NIHTB';
 %include "D:\dropbox\projects\sas_lib\all_macros.sas";
 %csvtosas('FBFF68E1-8148-4D5E-AF5D-DB04E3C4FDF2_AssessmentScores.csv',nihtb.scoredata,3);
 %csvtosas('FBFF68E1-8148-4D5E-AF5D-DB04E3C4FDF2_RegistrationData.csv',nihtb.registrationdata,3);
@@ -180,12 +180,12 @@ data nihtb.scoredata_ww;
 run;
 
 proc sort data=nihtb.scoredata_ww out=scoredata_ww; by nestid; run;
-proc sort data=nihtb.nest_i_ii_sr_merge_05aug14 out=nest_merge; by nestid; run;
-data nihtb.nest_merge_tb;
+proc sort data="P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat" out=nest_merge; by nestid; run;
+data niches.nest_merge_tb;
 	merge scoredata_ww(in=s) nest_merge;
 	by nestid;
 	if s=1 then niches_nihtb=1;
 run;
-proc freq data=nest_merge; tables niches_nihtb; run;
+proc means data=nihtb.scoredata_ww; run;
 
 

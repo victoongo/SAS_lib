@@ -1,15 +1,15 @@
 
 data n1weight (rename=(wt_reference_date=ref_date weight_kg=weight source=wt_source));
-	set "P:\NEST I\Vitals\nest_r01_all_weight_28nov14.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
+	set "P:\NEST I\Vitals\nest_r01_all_weight_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
 run;
 data n2weight (rename=(wt_reference_date=ref_date weight_kg=weight source=wt_source));
-	set "P:\NEST II\Vitals\nest_r21_all_weight_28nov14.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
+	set "P:\NEST II\Vitals\nest_r21_all_weight_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
 run;
 data n1height (rename=(ht_reference_date=ref_date height_length_cm=height source=ht_source));
-	set "P:\NEST I\Vitals\nest_r01_all_height_28nov14.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
+	set "P:\NEST I\Vitals\nest_r01_all_height_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
 run;
 data n2height (rename=(ht_reference_date=ref_date height_length_cm=height source=ht_source));
-	set "P:\NEST II\Vitals\nest_r21_all_height_28nov14.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
+	set "P:\NEST II\Vitals\nest_r21_all_height_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
 run;
 data merged(keep=nestid mom_nestid weight height);
 	set "P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat"
@@ -42,20 +42,20 @@ libname refdir 'd:\dropbox\projects\sas_lib\';
 %include 'd:\dropbox\projects\sas_lib\CDC-source-code.sas'; run;
 
 data merged_var (keep=nestid mom_nestid BMI_LMP_kgm2 mat_gest_wt_gain_category2
-					  gest_weight_gain_kg parity_3cat mom_age_delv race_final4 education4 GestAge_TotalDays 
+					  gest_weight_gain_kg parity_3cat mom_age_delv race_final education4 GestAge_TotalDays 
 					  GEST_DIABETES PREGNANCY_HYPERTENSION smoker maternal_smoking2);
 	set "P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat"
 		(keep=nestid mom_nestid BMI_LMP_kgm2 mat_gest_wt_gain_category
-			  gest_weight_gain_kg medabs_parity mom_age_delv race_final2 education GestAge_TotalDays 
+			  gest_weight_gain_kg medabs_parity mom_age_delv race_final education GestAge_TotalDays 
 			  GEST_DIABETES PREGNANCY_HYPERTENSION smoker maternal_smoking2);
 	if education = 1 then education4 = 1; /* 1=LT High School */
 	else if education in (2 3) then education4 = 2; /*2 = High School or GED or Some College  */
 	else if education in (4 5) then education4=3; /*College Graduate */
 
-	if race_final2 = 1 then race_final4 = 1; /* 1=White */
-	else if race_final2= 2 then race_final4 = 2; /*2 = Hispanic*/
-	else if race_final2 =3 then race_final4 = 3; /*Black */
-	else if race_final2 in(4,5 ) then race_final4=4; /*Asian, NA and Other*/
+	*if race_final2 = 1 then race_final4 = 1; /* 1=White */
+	*else if race_final2= 2 then race_final4 = 2; /*2 = Hispanic*/
+	*else if race_final2 =3 then race_final4 = 3; /*Black */
+	*else if race_final2 in(4,5 ) then race_final4=4; /*Asian, NA and Other*/
 
 	if medabs_parity = 0 then parity_3cat = 0; 
 	else if medabs_parity in (1 2 3) then parity_3cat = 1; 
@@ -90,7 +90,9 @@ proc export data=_cdcdata outfile="D:\Dropbox\Projects\R_lib\bmi\data\bmi.csv" d
 
 proc contents data="P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat";run;
 proc freq data="P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat";
-	tables GEST_DIAB_CONTROL GEST_DIABETES PREGNANCY_HYPERTENSION; run;
+	tables race_final race_final2 race_final*race_final2 / missprint; run;
+proc freq data="P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat";
+	tables race_final; run;
 proc sort data="P:\NEST I\Vitals\nest_r01_ht_wt_age2_28nov14.sas7bdat" out=age2; by mom_nestid nestid; run;
 proc sort data="P:\NEST I\Vitals\nest_r01_ht_wt_age1_28nov14.sas7bdat" out=age1; by mom_nestid nestid; run;
 proc sort data="P:\NEST I\Vitals\nest_r01_ht_wt_age6mon_28nov14.sas7bdat" out=age6m; by mom_nestid nestid; run;
@@ -111,3 +113,6 @@ proc sort data=msex; by mom_nestid nestid; run;
 proc sort data=a6sex; by mom_nestid nestid; run;
 data sex; merge msex a6sex; by mom_nestid nestid; run;
 proc freq data=sex; tables sex*baby_gender; run;
+
+proc contents data="P:\NEST I\Chart Abstraction\nest_r01_baseline_medabs_22jan14.sas7bdat"; run;
+proc freq data="P:\NEST I\Chart Abstraction\nest_r01_baseline_medabs_22jan14.sas7bdat"; tables abs_weight_lmp_kg; run;
