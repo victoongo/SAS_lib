@@ -1,6 +1,5 @@
 * BASC134 (1-4) recode to (0-3); 
 %let basc_hy = basc005 basc017 basc027 basc033 basc045 basc055 basc061 basc083 basc089 basc111 basc117;
-%let basc_hy = basc005 basc017 basc027 basc033 basc045 basc055 basc061 basc083 basc089 basc111 basc117;
 %let basc_ag = basc012 basc018 basc021 basc040 basc046 basc049 basc068 basc074 basc077 basc096 basc124;
 %let basc_ax = basc020 basc023 basc028 basc035 basc048 basc051 basc056 basc063 basc076 basc091 basc104 basc119 basc132;
 %let basc_dp = basc014 basc016 basc022 basc024 basc042 basc044 basc050 basc052 basc072 basc100 basc128;
@@ -13,7 +12,13 @@
 %let basc_dl = basc039 basc059r basc067r basc087r basc095r basc102r basc115r basc123r basc130r;
 %let basc_fc = basc002r basc015 basc030 basc043 basc058 basc071 basc086 basc099 basc105 basc114 basc133r;
 
-%let basc_sub_scales = basc_hy basc_hy basc_ag basc_ax basc_dp basc_sm basc_at basc_wd basc_ap basc_ad basc_ss basc_dl basc_fc;
+%let basc_ext = basc_hy basc_ag;
+%let basc_int = basc_ax basc_dp basc_sm;
+%let basc_bsi = basc_at basc_wd basc_ap basc_dp basc_ag basc_hy;
+%let basc_ada = basc_ad basc_ss basc_dl basc_fc;
+
+%let basc_sub_scales = basc_hy basc_ag basc_ax basc_dp basc_sm basc_at basc_wd basc_ap basc_ad basc_ss basc_dl basc_fc;
+%let basc_scales = basc_ext basc_int basc_bsi basc_ada;
 
 * BRIEF63 (1-3) norecode;
 %let brief_in = brief03 brief08 brief13 brief18 brief23 brief28 brief33 brief38 brief43 brief48 brief52 brief54 brief56 brief58 brief60 brief62;

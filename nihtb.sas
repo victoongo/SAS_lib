@@ -180,12 +180,7 @@ data nihtb.scoredata_ww;
 run;
 
 proc sort data=nihtb.scoredata_ww out=scoredata_ww; by nestid; run;
-proc sort data="P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat" out=nest_merge; by nestid; run;
-data niches.nest_merge_tb;
-	merge scoredata_ww(in=s) nest_merge;
-	by nestid;
-	if s=1 then niches_nihtb=1;
-run;
+
 proc means data=nihtb.scoredata_ww; run;
 
 
