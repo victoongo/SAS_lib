@@ -1,4 +1,4 @@
-label basc_hy = 'hyperactivity';
+	label basc_hy = 'hyperactivity';
 	label basc_ag = 'aggression';
 	label basc_ax = 'anxiety';
 	label basc_dp = 'depression';

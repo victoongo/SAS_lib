@@ -1,18 +1,18 @@
 
 data n1weight (rename=(wt_reference_date=ref_date weight_kg=weight source=wt_source));
-	set "P:\NEST I\Vitals\nest_r01_all_weight_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
+	set "P:\NEST I\Vitals\nest_r01_all_weight_05may15.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
 run;
 data n2weight (rename=(wt_reference_date=ref_date weight_kg=weight source=wt_source));
-	set "P:\NEST II\Vitals\nest_r21_all_weight_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
+	set "P:\NEST II\Vitals\nest_r21_all_weight_05may15.sas7bdat" (keep=nestid mom_nestid final_child_dob wt_reference_date weight_kg sex source);
 run;
 data n1height (rename=(ht_reference_date=ref_date height_length_cm=height source=ht_source));
-	set "P:\NEST I\Vitals\nest_r01_all_height_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
+	set "P:\NEST I\Vitals\nest_r01_all_height_05may15.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
 run;
 data n2height (rename=(ht_reference_date=ref_date height_length_cm=height source=ht_source));
-	set "P:\NEST II\Vitals\nest_r21_all_height_10jan15.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
+	set "P:\NEST II\Vitals\nest_r21_all_height_05may15.sas7bdat" (keep=nestid mom_nestid final_child_dob ht_reference_date height_length_cm sex source);
 run;
 data merged(keep=nestid mom_nestid weight height);
-	set "P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_27dec14.sas7bdat"
+	set "P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge.sas7bdat"
 		(keep=nestid mom_nestid baby_weight LENGTH_BABY LENGTH_IN_OR_CM baby_gender rename=(baby_weight=weight length_baby=height baby_gender=sex));
 	agemos=0;
 	weight=weight/1000;
@@ -43,14 +43,14 @@ libname refdir 'd:\dropbox\projects\sas_lib\';
 
 data merged_var (keep=nestid mom_nestid BMI_LMP_kgm2 mat_gest_wt_gain_category2
 					  gest_weight_gain_kg parity_3cat mom_age_delv race_final education4 GestAge_TotalDays 
-					  GEST_DIABETES PREGNANCY_HYPERTENSION smoker maternal_smoking2 baby_weight baby_gender);
-	set "P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge_15feb15.sas7bdat"
-		(keep=nestid mom_nestid BMI_LMP_kgm2 mat_gest_wt_gain_category
-			  gest_weight_gain_kg medabs_parity mom_age_delv race_final education GestAge_TotalDays 
-			  GEST_DIABETES PREGNANCY_HYPERTENSION smoker maternal_smoking2 baby_weight baby_gender);
-	if education = 1 then education4 = 1; /* 1=LT High School */
-	else if education in (2 3) then education4 = 2; /*2 = High School or GED or Some College  */
-	else if education in (4 5) then education4=3; /*College Graduate */
+					  GEST_DIABETES PREGNANCY_HYPERTENSION maternal_smoking maternal_smoking2 baby_weight baby_gender);
+	set "P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge.sas7bdat"
+		(keep=nestid mom_nestid BMI_LMP_kgm2 mat_gest_wt_gain_category mat_ht_m
+			  gest_weight_gain_kg medabs_parity mom_age_delv race_final education_final GestAge_TotalDays 
+			  GEST_DIABETES PREGNANCY_HYPERTENSION maternal_smoking maternal_smoking2 baby_weight baby_gender);
+	if education_final = 1 then education4 = 1; /* 1=LT High School */
+	else if education_final in (2 3) then education4 = 2; /*2 = High School or GED or Some College  */
+	else if education_final in (4 5) then education4=3; /*College Graduate */
 
 	*if race_final2 = 1 then race_final4 = 1; /* 1=White */
 	*else if race_final2= 2 then race_final4 = 2; /*2 = Hispanic*/
@@ -68,7 +68,7 @@ data merged_var (keep=nestid mom_nestid BMI_LMP_kgm2 mat_gest_wt_gain_category2
 	else if mat_gest_wt_gain_category="adequate" then mat_gest_wt_gain_category2=2;
 	else if mat_gest_wt_gain_category="excessive" then mat_gest_wt_gain_category2=3;
 run;
-proc export data=merged_var outfile="D:\Dropbox\Projects\R_lib\bmi\data\merged.csv" dbms=csv replace; run;
+/*proc export data=merged_var outfile="D:\Dropbox\Projects\R_lib\bmi\data\merged.csv" dbms=csv replace; run;*/
 /*
 One model would examine the relationship between pre-pregnancy BMI (BMI_LMP_kgm2 ) and weight controlling for the following: 
 gest_weight_gain_kg ib0.parity_3cat mom_age_delv ib1.race_final4 i.BABY_GENDER  i.education4 GestAge_TotalDays i.smoker 
@@ -83,7 +83,10 @@ data _cdcdata;
 run;
 proc contents data=_cdcdata; run;
 proc means data=_cdcdata; var agemos; run;
-proc export data=_cdcdata outfile="D:\Dropbox\Projects\R_lib\bmi\data\bmi.csv" dbms=csv replace; run;
+data "D:\Dropbox\Projects\R_lib\bmi\data\bmi";
+	set _cdcdata;
+run;
+/*proc export data=_cdcdata outfile="D:\Dropbox\Projects\R_lib\bmi\data\bmi.csv" dbms=csv replace; run;*/
 
 *proc hlm data=vital_all;
 *run;
