@@ -4,13 +4,14 @@ x 'cd p:\niches\redcap';
 
 proc sort data="P:\NEST I, II, and SR Harmonized Vars\nest_i_ii_sr_merge.sas7bdat" out=nest_merge; by nestid; run;
 data nest_merge; set nest_merge; nestid=nestid+0; run;
+%include "D:\Dropbox\Projects\sas_lib\Code for Summary Variables for NESTSR analyses.sas";
 
 * teacher survey;
 *%include "D:\Projects\redcap\NICHESTeacherSurvey_SAS_2014-09-19_1301.sas";
 /*data redcap.redcap_teacher; set redcap; run;*/
 
 * Parent survey;
-%include "p:\NICHES\redcap\NICHESParentSurvey_SAS_2015-05-04_1614.sas";
+%include "p:\NICHES\redcap\NICHESParentSurvey_SAS_2015-06-16_1352.sas";
 data redcap.redcap_parent; 
 	set redcap; 
 	if participant_id in ('113', '118', '162', '164') then delete;

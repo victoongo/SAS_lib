@@ -7,7 +7,7 @@ x 'cd p:\niches\redcap';
 /*data redcap.redcap_teacher; set redcap; run;*/
 
 * teacher survey;
-%include "p:\NICHES\redcap\NICHESteacherSurvey_SAS_2015-05-04_1615.sas";
+%include "p:\NICHES\redcap\NICHESteacherSurvey_SAS_2015-06-16_1352.sas";
 data redcap.redcap_teacher; set redcap; run;
 
 /*proc contents data=redcap.redcap_teacher; run;*/
